@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">My Purchases</string>
+    <string name="main_app_bar_title">Выберите список или создайте новый</string>
+    <string name="create_list_app_bar_title">Создание списка товаров</string>
+</resources>
