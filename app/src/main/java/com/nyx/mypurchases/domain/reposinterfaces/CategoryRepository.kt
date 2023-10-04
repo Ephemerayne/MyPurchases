@@ -1,4 +1,4 @@
-package com.nyx.mypurchases.model
+package com.nyx.mypurchases.domain.reposinterfaces
 
 import androidx.lifecycle.LiveData
 import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel

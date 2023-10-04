@@ -3,24 +3,33 @@ package com.nyx.mypurchases.ui.createlist.presenter
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.nyx.mypurchases.model.CategoryRepository
+import com.nyx.mypurchases.domain.reposinterfaces.CategoryRepository
 import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateListPresenter(
-    private val view: CreateListView,
-    private val categoryRepository: CategoryRepository,
-    private val lifecycleCoroutineScope: LifecycleCoroutineScope,
-) {
+class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRepository){
 
-    val categoriesList: LiveData<List<CategoryChipModel>> = categoryRepository.getAllCategories().map {
-        mutableListOf<CategoryChipModel>().apply {
-            addAll(it)
-            add(CategoryChipModel(0, "Новая"))
-        }
+    private lateinit var view: CreateListView
+    private lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
+
+    fun attachView(view: CreateListView) {
+        this.view = view
     }
+
+    fun setLifecycleScope(lifecycleCoroutineScope: LifecycleCoroutineScope) {
+        this.lifecycleCoroutineScope = lifecycleCoroutineScope
+    }
+
+    val categoriesList: LiveData<List<CategoryChipModel>> =
+        categoryRepository.getAllCategories().map {
+            mutableListOf<CategoryChipModel>().apply {
+                addAll(it)
+                add(CategoryChipModel(0, "Новая"))
+            }
+        }
 
     fun onTitleFieldClick() {
 

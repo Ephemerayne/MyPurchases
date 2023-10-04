@@ -11,23 +11,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
+import com.nyx.mypurchases.App
 import com.nyx.mypurchases.MainActivity
 import com.nyx.mypurchases.R
-import com.nyx.mypurchases.data.CategoriesDatabase
-import com.nyx.mypurchases.data.CategoryDao
-import com.nyx.mypurchases.data.CategoryRepositoryImpl
 import com.nyx.mypurchases.databinding.FragmentCreateListBinding
 import com.nyx.mypurchases.ui.createlist.presenter.CreateListPresenter
 import com.nyx.mypurchases.ui.createlist.presenter.CreateListView
 import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
+import javax.inject.Inject
 
 
 class CreateListFragment : Fragment(), CreateListView {
 
+    @Inject
     lateinit var presenter: CreateListPresenter
-    private lateinit var categoryDatabase: CategoriesDatabase
-    private lateinit var categoryDao: CategoryDao
-    lateinit var categoryRepository: CategoryRepositoryImpl
 
     private var _binding: FragmentCreateListBinding? = null
     private val binding get() = _binding!!
@@ -35,9 +32,7 @@ class CreateListFragment : Fragment(), CreateListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        categoryDatabase = CategoriesDatabase.getInstance(requireContext())
-        categoryDao = categoryDatabase.categoryDao()
-        categoryRepository = CategoryRepositoryImpl(categoryDao)
+        App.appComponent.injectFragment(this)
     }
 
     override fun onCreateView(
@@ -51,9 +46,11 @@ class CreateListFragment : Fragment(), CreateListView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = CreateListPresenter(this, categoryRepository, viewLifecycleOwner.lifecycleScope)
+        presenter.attachView(this)
+        presenter.setLifecycleScope(viewLifecycleOwner.lifecycleScope)
 
         presenter.categoriesList.observe(viewLifecycleOwner) { categories ->
+            println("debug from database: $categories")
             setupChips(categories)
         }
 

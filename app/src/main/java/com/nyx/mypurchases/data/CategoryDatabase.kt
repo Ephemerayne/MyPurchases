@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(entities = [CategoryChipModel::class], version = 1)
-abstract class CategoriesDatabase : RoomDatabase() {
+abstract class CategoryDatabase : RoomDatabase() {
 
     abstract fun categoryDao(): CategoryDataRoomImpl
 
@@ -27,17 +27,17 @@ abstract class CategoriesDatabase : RoomDatabase() {
         )
 
         @Volatile
-        private var INSTANCE: CategoriesDatabase? = null
+        private var INSTANCE: CategoryDatabase? = null
 
-        fun getInstance(context: Context): CategoriesDatabase =
+        fun getInstance(context: Context): CategoryDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
             }
 
-        private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(
+        private fun buildDatabase(context: Context): CategoryDatabase {
+            val roomDb = Room.databaseBuilder(
                 context.applicationContext,
-                CategoriesDatabase::class.java, "categories.db"
+                CategoryDatabase::class.java, "categories.db"
             )
                 // prepopulate the database after onCreate was called
                 .addCallback(object : Callback() {
@@ -53,5 +53,12 @@ abstract class CategoriesDatabase : RoomDatabase() {
                     }
                 })
                 .build()
+
+            // TODO fix prepopulate data
+            CoroutineScope(Dispatchers.IO).launch {
+                roomDb.runInTransaction {}
+            }
+            return roomDb
+        }
     }
 }
