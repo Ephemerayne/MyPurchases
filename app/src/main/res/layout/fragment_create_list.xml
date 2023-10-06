@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_border"
-            android:hint="Название списка"
+            android:hint="@string/title_hint"
             android:inputType="none"
             android:maxLines="2"
             android:minLines="1"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="4dp"
-            android:text="10/100" />
+            android:text="@string/limit_chars_field" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/list_edit_text"
@@ -39,18 +39,33 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/edit_text_border"
             android:gravity="top"
-            android:hint="Напишите список товаров через запятую"
+            android:hint="@string/product_list_hint"
             android:inputType="none"
             android:maxLines="10"
             android:minLines="5"
             android:padding="12dp" />
 
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Headline6"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Категория" />
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/category_title" />
+
+            <ImageView
+                android:id="@+id/edit_categories_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/edit_icon_desc"
+                android:src="@android:drawable/ic_menu_edit"
+                android:visibility="gone"/>
+        </LinearLayout>
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group"
@@ -66,8 +81,8 @@
             android:id="@+id/create_custom_category_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="40dp"
+            android:orientation="horizontal"
             android:visibility="gone">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -76,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/edit_text_border"
-                android:hint="Название категории"
+                android:hint="@string/new_category_hint"
                 android:inputType="none"
                 android:maxLines="2"
                 android:minLines="1"
@@ -91,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Добавить" />
+                android:text="@string/add_button" />
         </LinearLayout>
     </LinearLayout>
 
@@ -107,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:text="Вернуться" />
+            android:text="@string/back_button" />
 
         <Space
             android:layout_width="16dp"
@@ -119,6 +134,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:text="Создать список" />
+            android:text="@string/create_list_button" />
     </LinearLayout>
 </RelativeLayout>

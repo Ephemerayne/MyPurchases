@@ -1,6 +1,5 @@
 package com.nyx.mypurchases.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -13,7 +12,7 @@ import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
 interface CategoryDataRoomImpl : CategoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override fun insertCategory(category: CategoryChipModel)
+    override fun insertCategory(category: CategoryChipModel): Long
 
     @Update
     override fun updateCategory(category: CategoryChipModel)
@@ -25,5 +24,5 @@ interface CategoryDataRoomImpl : CategoryDao {
     override fun deleteAllCustomCategories()
 
     @Query("SELECT * FROM category_table")
-    override fun getAllCategories(): LiveData<List<CategoryChipModel>>
+    override fun getAllCategories(): List<CategoryChipModel>
 }

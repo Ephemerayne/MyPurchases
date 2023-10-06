@@ -1,35 +1,30 @@
 package com.nyx.mypurchases.ui.createlist.presenter
 
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+import com.google.android.material.chip.Chip
 import com.nyx.mypurchases.domain.reposinterfaces.CategoryRepository
 import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRepository){
+class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRepository) {
 
     private lateinit var view: CreateListView
     private lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
+    var lastCreatedChipId: Long? = null
 
-    fun attachView(view: CreateListView) {
+    var isEditModeEnabled = false
+    private var isEditModeAvailable = false
+
+    fun attachView(view: CreateListView, lifecycleCoroutineScope: LifecycleCoroutineScope) {
         this.view = view
-    }
-
-    fun setLifecycleScope(lifecycleCoroutineScope: LifecycleCoroutineScope) {
         this.lifecycleCoroutineScope = lifecycleCoroutineScope
-    }
 
-    val categoriesList: LiveData<List<CategoryChipModel>> =
-        categoryRepository.getAllCategories().map {
-            mutableListOf<CategoryChipModel>().apply {
-                addAll(it)
-                add(CategoryChipModel(0, "Новая"))
-            }
-        }
+        refreshCategories()
+    }
 
     fun onTitleFieldClick() {
 
@@ -40,14 +35,59 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
     }
 
     fun onChipCategoryClick(chip: CategoryChipModel) {
-        view.toggleCustomCategoryFieldVisibility(chip.title == "Новая")
+        if (isEditModeEnabled && chip.isCustom) {
+            lifecycleCoroutineScope.launch {
+                CoroutineScope(Dispatchers.IO).launch {
+                    categoryRepository.deleteCategory(chip)
+                }.join()
+
+                refreshCategories()
+            }
+        }
+
+        view.toggleCustomCategoryFieldVisibility(
+            isVisible = chip.id == 0L
+        )
+    }
+
+    fun onNewCategoryChipClick(chip: Chip) {
+        view.toggleCustomCategoryFieldVisibility(
+            isVisible = chip.id == 0
+        )
     }
 
     fun onAddCategoryClick(chipModel: CategoryChipModel) {
         lifecycleCoroutineScope.launch {
             CoroutineScope(Dispatchers.IO).launch {
-                categoryRepository.insertCategory(chipModel)
-            }
+                lastCreatedChipId = categoryRepository.insertCategory(chipModel)
+            }.join()
+
+            refreshCategories()
+        }
+    }
+
+    fun toggleEditCategoriesMode() {
+        isEditModeEnabled = !isEditModeEnabled
+
+        lifecycleCoroutineScope.launch {
+            view.toggleEditCategoriesMode(isEditModeEnabled)
+
+            refreshCategories()
+        }
+    }
+
+    private suspend fun getAllCategories(): List<CategoryChipModel> {
+        return withContext(Dispatchers.IO) {
+            categoryRepository.getAllCategories()
+        }
+    }
+
+    private fun refreshCategories() {
+        lifecycleCoroutineScope.launch {
+            val allCategories = getAllCategories()
+            isEditModeAvailable = allCategories.any { it.isCustom }
+            view.setDeleteCategoryVisibility(isEditModeAvailable)
+            view.setupChips(allCategories)
         }
     }
 }

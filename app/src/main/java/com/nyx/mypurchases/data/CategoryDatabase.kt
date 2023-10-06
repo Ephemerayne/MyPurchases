@@ -18,7 +18,7 @@ abstract class CategoryDatabase : RoomDatabase() {
     companion object {
 
         val PREPOPULATE_DATA = listOf(
-            CategoryChipModel(0, "Смешанное"),
+            CategoryChipModel(0, "Смешанная"),
             CategoryChipModel(0, "Продукты"),
             CategoryChipModel(0, "Косметика"),
             CategoryChipModel(0, "Аптека"),
