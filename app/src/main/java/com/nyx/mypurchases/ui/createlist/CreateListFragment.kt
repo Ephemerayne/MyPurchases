@@ -3,11 +3,13 @@ package com.nyx.mypurchases.ui.createlist
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -50,7 +52,8 @@ class CreateListFragment : Fragment(), CreateListView {
 
         presenter.attachView(this, viewLifecycleOwner.lifecycleScope)
 
-        setListeners()
+        setButtonsListeners()
+        setEditTextFieldsListeners()
     }
 
     override fun onDestroyView() {
@@ -64,35 +67,45 @@ class CreateListFragment : Fragment(), CreateListView {
         (activity as? MainActivity)?.setActionBarTitle(getString(R.string.create_list_app_bar_title))
     }
 
-    override fun setupChips(categories: List<CategoryChipModel>) {
+    override fun setupChips(
+        categories: List<CategoryChipModel>,
+        checkedId: Int?,
+        isEditModeEnabled: Boolean,
+    ) {
         binding.chipGroup.removeAllViews()
 
-        categories.forEachIndexed { index, chipModel ->
+        categories.forEachIndexed { index, category ->
             val chip = Chip(this.context)
-            chip.text = chipModel.title
+            chip.text = category.title
 
             chip.isCheckable = true
 
-            chip.isChecked = index == 0
-            chip.isChecked = chipModel.id == presenter.lastCreatedChipId
+            if (!isEditModeEnabled) {
+                chip.isChecked = index == 0
+                if (checkedId != null) {
+                    chip.isChecked = category.id == checkedId
+                }
+            }
 
             chip.closeIcon = getDrawable(requireContext(), android.R.drawable.ic_menu_delete)
-            chip.isCloseIconVisible = presenter.isEditModeEnabled && chipModel.isCustom
+            chip.isCloseIconVisible = isEditModeEnabled && category.isCustom
 
             binding.chipGroup.addView(chip)
 
             chip.setOnClickListener {
-                onChipClick(chipModel)
+                onChipClick(category)
             }
         }
 
-        setupNewCategoryChip()
+        setupNewCategoryChip(isEditModeEnabled)
     }
 
-    private fun setupNewCategoryChip() {
+    private fun setupNewCategoryChip(isEditModeEnabled: Boolean) {
         val newChip = Chip(this.context)
         newChip.id = 0
+        newChip.isCheckable = true
         newChip.text = getString(R.string.new_category_text)
+        newChip.visibility = if (isEditModeEnabled) View.GONE else View.VISIBLE
         binding.chipGroup.addView(newChip)
 
         newChip.setOnClickListener {
@@ -100,24 +113,49 @@ class CreateListFragment : Fragment(), CreateListView {
         }
     }
 
-    private fun setListeners() {
+    private fun setButtonsListeners() {
         binding.backButton.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
 
         binding.editCategoriesIcon.setOnClickListener {
-            activateEditCategoriesMode()
+            presenter.toggleEditCategoriesMode()
         }
 
         binding.addCategoryButton.setOnClickListener {
-            onAddCategoryClick(
-                CategoryChipModel(
-                    id = 0,
-                    title = binding.categoryNameEditText.text.toString(),
-                    isCustom = true
-                )
-            )
+            presenter.onAddCategoryClick(binding.categoryNameEditText.text.toString().trim())
         }
+
+        binding.createListButton.setOnClickListener {
+            presenter.createList()
+        }
+    }
+
+    private fun setEditTextFieldsListeners() {
+        binding.titleEditText.addTextChangedListener {
+            presenter.getTitleText(it.toString())
+        }
+
+        binding.categoryNameEditText.addTextChangedListener {
+            presenter.setNewCategoryTitle(it.toString())
+        }
+
+        binding.listEditText.addTextChangedListener {
+            presenter.getProductsText(it.toString())
+        }
+    }
+
+    override fun addCategoryButtonClickable(isEnabled: Boolean) {
+        binding.addCategoryButton.isEnabled = isEnabled
+    }
+
+    override fun createListButtonClickable(isEnabled: Boolean) {
+        binding.createListButton.isEnabled = isEnabled
+    }
+
+    override fun setupTitleFieldView(currentChars: Int, maxChars: Int) {
+        binding.titleEditText.filters = arrayOf(InputFilter.LengthFilter(maxChars))
+        binding.titleTextLimit.text = getString(R.string.limit_chars_field, currentChars, maxChars)
     }
 
     private fun onChipClick(chipModel: CategoryChipModel) {
@@ -125,16 +163,9 @@ class CreateListFragment : Fragment(), CreateListView {
     }
 
     private fun onNewCategoryChipClick(chip: Chip) {
+        binding.categoryNameEditText.text?.clear()
+
         presenter.onNewCategoryChipClick(chip)
-    }
-
-    private fun onAddCategoryClick(chipModel: CategoryChipModel) {
-        presenter.onAddCategoryClick(chipModel)
-        toggleCustomCategoryFieldVisibility(false)
-    }
-
-    private fun activateEditCategoriesMode() {
-        presenter.toggleEditCategoriesMode()
     }
 
     override fun toggleCustomCategoryFieldVisibility(isVisible: Boolean) {
@@ -146,8 +177,8 @@ class CreateListFragment : Fragment(), CreateListView {
         }
     }
 
-    override fun setDeleteCategoryVisibility(isVisible: Boolean) {
-        binding.editCategoriesIcon.visibility = if (isVisible) View.VISIBLE else View.GONE
+    override fun setDeleteCategoryVisibility(isAvailable: Boolean) {
+        binding.editCategoriesIcon.visibility = if (isAvailable) View.VISIBLE else View.GONE
     }
 
     override fun toggleEditCategoriesMode(isEnabled: Boolean) {

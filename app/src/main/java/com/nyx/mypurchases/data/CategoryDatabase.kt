@@ -20,10 +20,11 @@ abstract class CategoryDatabase : RoomDatabase() {
         val PREPOPULATE_DATA = listOf(
             CategoryChipModel(0, "Смешанная"),
             CategoryChipModel(0, "Продукты"),
+            CategoryChipModel(0, "Одежда"),
             CategoryChipModel(0, "Косметика"),
+            CategoryChipModel(0, "Бытовая химия"),
             CategoryChipModel(0, "Аптека"),
             CategoryChipModel(0, "Для дома"),
-            CategoryChipModel(0, "Ремонт"),
         )
 
         @Volatile

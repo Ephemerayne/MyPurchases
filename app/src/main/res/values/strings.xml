@@ -5,7 +5,7 @@
     <string name="category_title">Категория</string>
     <string name="new_category_text">Новая</string>
     <string name="product_list_hint">Напишите список товаров через запятую</string>
-    <string name="limit_chars_field">$currentChars/$maxChars</string>
+    <string name="limit_chars_field">%1$d/%2$d</string>
     <string name="title_hint">Название списка</string>
     <string name="new_category_hint">Название категории</string>
     <string name="add_button">Добавить</string>

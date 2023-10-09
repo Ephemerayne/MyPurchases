@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.android.material.chip.Chip
 import com.nyx.mypurchases.domain.reposinterfaces.CategoryRepository
 import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
+import com.nyx.mypurchases.ui.createlist.presenter.models.ProductsListModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,66 +15,98 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
 
     private lateinit var view: CreateListView
     private lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
-    var lastCreatedChipId: Long? = null
+    private var checkedCategoryId: Int? = null
 
-    var isEditModeEnabled = false
+    private var isEditModeEnabled = false
     private var isEditModeAvailable = false
 
     fun attachView(view: CreateListView, lifecycleCoroutineScope: LifecycleCoroutineScope) {
         this.view = view
         this.lifecycleCoroutineScope = lifecycleCoroutineScope
 
+        view.setupTitleFieldView(0, LIST_TITLE_MAX_CHARS)
+
         refreshCategories()
     }
 
-    fun onTitleFieldClick() {
-
-    }
-
-    fun onListFieldClick() {
-
-    }
-
     fun onChipCategoryClick(chip: CategoryChipModel) {
-        if (isEditModeEnabled && chip.isCustom) {
-            lifecycleCoroutineScope.launch {
-                CoroutineScope(Dispatchers.IO).launch {
-                    categoryRepository.deleteCategory(chip)
-                }.join()
-
-                refreshCategories()
-            }
-        }
-
-        view.toggleCustomCategoryFieldVisibility(
-            isVisible = chip.id == 0L
-        )
-    }
-
-    fun onNewCategoryChipClick(chip: Chip) {
-        view.toggleCustomCategoryFieldVisibility(
-            isVisible = chip.id == 0
-        )
-    }
-
-    fun onAddCategoryClick(chipModel: CategoryChipModel) {
         lifecycleCoroutineScope.launch {
             CoroutineScope(Dispatchers.IO).launch {
-                lastCreatedChipId = categoryRepository.insertCategory(chipModel)
+                if (isEditModeEnabled && chip.isCustom) {
+                    categoryRepository.deleteCategory(chip)
+                } else {
+                    checkedCategoryId = chip.id
+                    productsListModel = productsListModel.copy(categoryChipModel = chip)
+                }
             }.join()
 
             refreshCategories()
         }
+
+        view.toggleCustomCategoryFieldVisibility(false)
     }
 
-    fun toggleEditCategoriesMode() {
-        isEditModeEnabled = !isEditModeEnabled
+    fun onNewCategoryChipClick(chip: Chip) {
+        productsListModel = productsListModel.copy(
+            categoryChipModel = CategoryChipModel(
+                chip.id,
+                chip.text.toString()
+            )
+        )
+        view.toggleCustomCategoryFieldVisibility(
+            isVisible = chip.id == 0
+        )
 
+        setupCreateListButton()
+    }
+
+    fun onAddCategoryClick(categoryTitle: String) {
         lifecycleCoroutineScope.launch {
-            view.toggleEditCategoriesMode(isEditModeEnabled)
+            CoroutineScope(Dispatchers.IO).launch {
+                val newCategory = CategoryChipModel(title = categoryTitle, isCustom = true)
+                checkedCategoryId = categoryRepository.insertCategory(newCategory).toInt()
+                productsListModel = productsListModel.copy(categoryChipModel = newCategory)
+            }.join()
 
             refreshCategories()
         }
+
+        view.toggleCustomCategoryFieldVisibility(false)
+    }
+
+    fun setNewCategoryTitle(categoryTitle: String) {
+        view.addCategoryButtonClickable(isEnabled = categoryTitle.isNotBlank())
+    }
+
+    private fun setupCreateListButton() {
+        view.createListButtonClickable(isEnabled = isCreateListButtonEnabled())
+    }
+
+    fun getTitleText(text: String) {
+        productsListModel = productsListModel.copy(title = text.trim())
+        view.setupTitleFieldView(text.length, LIST_TITLE_MAX_CHARS)
+
+        setupCreateListButton()
+    }
+
+    fun getProductsText(text: String) {
+        val productsList = text.trim().split(",")
+        productsListModel = productsListModel.copy(products = productsList)
+
+        setupCreateListButton()
+    }
+
+    // вкл/выкл иконку editMode
+    fun toggleEditCategoriesMode() {
+        checkedCategoryId = null
+        isEditModeEnabled = !isEditModeEnabled
+
+        // смена стиля переключателя
+        view.toggleEditCategoriesMode(isEditModeEnabled)
+
+        // видимость поля с кастомным тайтлом категории
+        view.toggleCustomCategoryFieldVisibility(false)
+        refreshCategories()
     }
 
     private suspend fun getAllCategories(): List<CategoryChipModel> {
@@ -84,10 +117,48 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
 
     private fun refreshCategories() {
         lifecycleCoroutineScope.launch {
-            val allCategories = getAllCategories()
-            isEditModeAvailable = allCategories.any { it.isCustom }
+            val categories = withContext(Dispatchers.IO) {
+                getAllCategories()
+            }
+            checkedCategoryId = checkedCategoryId ?: categories.firstOrNull()?.id
+
+            // иконка EditMode доступна, если есть в репе хотя бы 1 кастомная категория
+            isEditModeAvailable = categories.any { it.isCustom }
+
+            if (!isEditModeAvailable) {
+                isEditModeEnabled = false
+            }
+
+            categories.firstOrNull { it.id == checkedCategoryId }?.let { chip ->
+                productsListModel = productsListModel.copy(categoryChipModel = chip)
+            }
+
+            // видимость иконки editMode
             view.setDeleteCategoryVisibility(isEditModeAvailable)
-            view.setupChips(allCategories)
+
+            // визуальное переключение иконки EditMode
+            view.toggleEditCategoriesMode(isEditModeEnabled)
+
+            view.setupChips(categories, checkedCategoryId, isEditModeEnabled)
+
+            setupCreateListButton()
+        }
+    }
+
+    fun createList() {
+        println("debug: $productsListModel")
+        // отправка в репо productsListModel
+    }
+
+    companion object {
+        private const val LIST_TITLE_MAX_CHARS = 100
+
+        private var productsListModel: ProductsListModel = ProductsListModel()
+
+        private fun isCreateListButtonEnabled(): Boolean {
+            return with(productsListModel) {
+                products?.isNotEmpty() == true && title.isNotBlank() && categoryChipModel.id != 0
+            }
         }
     }
 }
