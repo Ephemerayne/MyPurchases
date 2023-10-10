@@ -18,10 +18,10 @@ import com.nyx.mypurchases.App
 import com.nyx.mypurchases.MainActivity
 import com.nyx.mypurchases.R
 import com.nyx.mypurchases.databinding.FragmentCreateListBinding
+import com.nyx.mypurchases.domain.entity.CategoryModel
 import com.nyx.mypurchases.extensions.setTint
 import com.nyx.mypurchases.ui.createlist.presenter.CreateListPresenter
 import com.nyx.mypurchases.ui.createlist.presenter.CreateListView
-import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
 import javax.inject.Inject
 
 
@@ -36,7 +36,7 @@ class CreateListFragment : Fragment(), CreateListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        App.appComponent.injectFragment(this)
+        App.appComponent.injectCreateListFragment(this)
     }
 
     override fun onCreateView(
@@ -68,7 +68,7 @@ class CreateListFragment : Fragment(), CreateListView {
     }
 
     override fun setupChips(
-        categories: List<CategoryChipModel>,
+        categories: List<CategoryModel>,
         checkedId: Int?,
         isEditModeEnabled: Boolean,
     ) {
@@ -158,7 +158,7 @@ class CreateListFragment : Fragment(), CreateListView {
         binding.titleTextLimit.text = getString(R.string.limit_chars_field, currentChars, maxChars)
     }
 
-    private fun onChipClick(chipModel: CategoryChipModel) {
+    private fun onChipClick(chipModel: CategoryModel) {
         presenter.onChipCategoryClick(chipModel)
     }
 

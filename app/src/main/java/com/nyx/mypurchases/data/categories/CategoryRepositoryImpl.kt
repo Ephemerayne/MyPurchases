@@ -1,21 +1,21 @@
-package com.nyx.mypurchases.data
+package com.nyx.mypurchases.data.categories
 
+import com.nyx.mypurchases.domain.entity.CategoryModel
 import com.nyx.mypurchases.domain.reposinterfaces.CategoryRepository
-import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
 import javax.inject.Inject
 
 class CategoryRepositoryImpl @Inject constructor(private val dao: CategoryDao) :
     CategoryRepository {
 
-    override fun insertCategory(category: CategoryChipModel): Long {
+    override fun insertCategory(category: CategoryModel): Long {
         return dao.insertCategory(category)
     }
 
-    override fun updateCategory(category: CategoryChipModel) {
+    override fun updateCategory(category: CategoryModel) {
         dao.updateCategory(category)
     }
 
-    override fun deleteCategory(category: CategoryChipModel) {
+    override fun deleteCategory(category: CategoryModel) {
         dao.deleteCategory(category)
     }
 
@@ -23,7 +23,7 @@ class CategoryRepositoryImpl @Inject constructor(private val dao: CategoryDao) :
         dao.deleteAllCustomCategories()
     }
 
-    override fun getAllCategories():List<CategoryChipModel> {
+    override fun getAllCategories():List<CategoryModel> {
         return dao.getAllCategories()
     }
 }

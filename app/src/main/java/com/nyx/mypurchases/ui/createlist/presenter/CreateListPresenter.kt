@@ -2,16 +2,20 @@ package com.nyx.mypurchases.ui.createlist.presenter
 
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.android.material.chip.Chip
+import com.nyx.mypurchases.domain.entity.CategoryModel
+import com.nyx.mypurchases.domain.entity.PurchaseModel
 import com.nyx.mypurchases.domain.reposinterfaces.CategoryRepository
-import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
-import com.nyx.mypurchases.ui.createlist.presenter.models.ProductsListModel
+import com.nyx.mypurchases.domain.reposinterfaces.PurchaseRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRepository) {
+class CreateListPresenter @Inject constructor(
+    val categoryRepository: CategoryRepository,
+    val purchaseRepository: PurchaseRepository,
+) {
 
     private lateinit var view: CreateListView
     private lateinit var lifecycleCoroutineScope: LifecycleCoroutineScope
@@ -29,14 +33,14 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
         refreshCategories()
     }
 
-    fun onChipCategoryClick(chip: CategoryChipModel) {
+    fun onChipCategoryClick(chip: CategoryModel) {
         lifecycleCoroutineScope.launch {
             CoroutineScope(Dispatchers.IO).launch {
                 if (isEditModeEnabled && chip.isCustom) {
                     categoryRepository.deleteCategory(chip)
                 } else {
                     checkedCategoryId = chip.id
-                    productsListModel = productsListModel.copy(categoryChipModel = chip)
+                    purchaseModel = purchaseModel.copy(category = chip)
                 }
             }.join()
 
@@ -47,8 +51,8 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
     }
 
     fun onNewCategoryChipClick(chip: Chip) {
-        productsListModel = productsListModel.copy(
-            categoryChipModel = CategoryChipModel(
+        purchaseModel = purchaseModel.copy(
+            category = CategoryModel(
                 chip.id,
                 chip.text.toString()
             )
@@ -63,9 +67,9 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
     fun onAddCategoryClick(categoryTitle: String) {
         lifecycleCoroutineScope.launch {
             CoroutineScope(Dispatchers.IO).launch {
-                val newCategory = CategoryChipModel(title = categoryTitle, isCustom = true)
+                val newCategory = CategoryModel(title = categoryTitle, isCustom = true)
                 checkedCategoryId = categoryRepository.insertCategory(newCategory).toInt()
-                productsListModel = productsListModel.copy(categoryChipModel = newCategory)
+                purchaseModel = purchaseModel.copy(category = newCategory)
             }.join()
 
             refreshCategories()
@@ -83,7 +87,7 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
     }
 
     fun getTitleText(text: String) {
-        productsListModel = productsListModel.copy(title = text.trim())
+        purchaseModel = purchaseModel.copy(title = text.trim())
         view.setupTitleFieldView(text.length, LIST_TITLE_MAX_CHARS)
 
         setupCreateListButton()
@@ -91,7 +95,7 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
 
     fun getProductsText(text: String) {
         val productsList = text.trim().split(",")
-        productsListModel = productsListModel.copy(products = productsList)
+        purchaseModel = purchaseModel.copy(purchases = productsList)
 
         setupCreateListButton()
     }
@@ -109,7 +113,7 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
         refreshCategories()
     }
 
-    private suspend fun getAllCategories(): List<CategoryChipModel> {
+    private suspend fun getAllCategories(): List<CategoryModel> {
         return withContext(Dispatchers.IO) {
             categoryRepository.getAllCategories()
         }
@@ -130,7 +134,7 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
             }
 
             categories.firstOrNull { it.id == checkedCategoryId }?.let { chip ->
-                productsListModel = productsListModel.copy(categoryChipModel = chip)
+                purchaseModel = purchaseModel.copy(category = chip)
             }
 
             // видимость иконки editMode
@@ -146,18 +150,23 @@ class CreateListPresenter @Inject constructor(val categoryRepository: CategoryRe
     }
 
     fun createList() {
-        println("debug: $productsListModel")
-        // отправка в репо productsListModel
+        println("debug: $purchaseModel")
+
+        lifecycleCoroutineScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                purchaseRepository.savePurchase(purchaseModel)
+            }
+        }
     }
 
     companion object {
         private const val LIST_TITLE_MAX_CHARS = 100
 
-        private var productsListModel: ProductsListModel = ProductsListModel()
+        private var purchaseModel: PurchaseModel = PurchaseModel()
 
         private fun isCreateListButtonEnabled(): Boolean {
-            return with(productsListModel) {
-                products?.isNotEmpty() == true && title.isNotBlank() && categoryChipModel.id != 0
+            return with(purchaseModel) {
+                purchases?.isNotEmpty() == true && title.isNotBlank() && category.id != 0
             }
         }
     }

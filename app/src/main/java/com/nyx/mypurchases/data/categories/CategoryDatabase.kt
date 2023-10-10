@@ -1,16 +1,19 @@
-package com.nyx.mypurchases.data
+package com.nyx.mypurchases.data.categories
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.nyx.mypurchases.ui.createlist.presenter.models.CategoryChipModel
+import com.nyx.mypurchases.domain.converters.Converters
+import com.nyx.mypurchases.domain.entity.CategoryModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [CategoryChipModel::class], version = 1)
+@Database(entities = [CategoryModel::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class CategoryDatabase : RoomDatabase() {
 
     abstract fun categoryDao(): CategoryDataRoomImpl
@@ -18,13 +21,13 @@ abstract class CategoryDatabase : RoomDatabase() {
     companion object {
 
         val PREPOPULATE_DATA = listOf(
-            CategoryChipModel(0, "Смешанная"),
-            CategoryChipModel(0, "Продукты"),
-            CategoryChipModel(0, "Одежда"),
-            CategoryChipModel(0, "Косметика"),
-            CategoryChipModel(0, "Бытовая химия"),
-            CategoryChipModel(0, "Аптека"),
-            CategoryChipModel(0, "Для дома"),
+            CategoryModel(0, "Смешанная"),
+            CategoryModel(0, "Продукты"),
+            CategoryModel(0, "Одежда"),
+            CategoryModel(0, "Косметика"),
+            CategoryModel(0, "Бытовая химия"),
+            CategoryModel(0, "Аптека"),
+            CategoryModel(0, "Для дома"),
         )
 
         @Volatile

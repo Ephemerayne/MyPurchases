@@ -9,7 +9,4 @@ class ActivityModule(private val activity: Activity) {
 
     @Provides
     fun provideActivity() = activity
-
-  /*  @Provides
-    fun providePresenter():*/
 }
