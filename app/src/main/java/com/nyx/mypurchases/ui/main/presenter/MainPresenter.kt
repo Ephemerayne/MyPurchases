@@ -2,6 +2,9 @@ package com.nyx.mypurchases.ui.main.presenter
 
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.nyx.mypurchases.domain.reposinterfaces.PurchaseRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
@@ -18,6 +21,17 @@ class MainPresenter @Inject constructor(
         this.view = view
         this.lifecycleCoroutineScope = lifecycleCoroutineScope
 
-    //    purchaseRepository.getAllPurchases()
+        refreshPurchasesLists()
+    }
+
+    // не работает с 1 айтемом
+    private fun refreshPurchasesLists() {
+        lifecycleCoroutineScope.launch {
+            val purchases = withContext(Dispatchers.IO) {
+                purchaseRepository.getAllPurchases()
+            }
+
+            view.setupPurchasesList(purchases)
+        }
     }
 }

@@ -29,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:padding="4dp" />
+            android:padding="4dp"
+            tools:text="0/100" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/list_edit_text"
@@ -47,25 +48,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingVertical="16dp">
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:text="@string/category_title" />
 
             <ImageView
                 android:id="@+id/edit_categories_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
                 android:contentDescription="@string/edit_icon_desc"
                 android:src="@android:drawable/ic_menu_edit"
-                android:layout_gravity="center_vertical"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <com.google.android.material.chip.ChipGroup
@@ -77,7 +78,7 @@
             app:selectionRequired="true"
             app:singleSelection="true" />
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/create_custom_category_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,17 +86,34 @@
             android:orientation="horizontal"
             android:visibility="gone">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/category_name_edit_text"
-                android:layout_width="0dp"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/edit_text_border"
-                android:hint="@string/new_category_hint"
-                android:inputType="none"
-                android:maxLines="2"
-                android:minLines="1"
-                android:padding="12dp" />
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/category_name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_border"
+                    android:hint="@string/new_category_hint"
+                    android:inputType="none"
+                    android:maxLines="2"
+                    android:minLines="1"
+                    android:padding="12dp" />
+
+                <TextView
+                    android:id="@+id/category_title_limit"
+                    style="@style/TextAppearance.AppCompat.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:padding="4dp"
+                    tools:text="0/20" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <Space
                 android:layout_width="16dp"
@@ -105,10 +123,9 @@
                 android:id="@+id/add_category_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:enabled="false"
                 android:text="@string/add_button" />
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </LinearLayout>
 
     <LinearLayout
@@ -135,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:text="@string/create_list_button"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:text="@string/create_list_button" />
     </LinearLayout>
 </RelativeLayout>

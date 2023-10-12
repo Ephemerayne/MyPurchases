@@ -13,4 +13,6 @@ interface CreateListView {
     fun addCategoryButtonClickable(isEnabled: Boolean)
     fun createListButtonClickable(isEnabled: Boolean)
     fun setupTitleFieldView(currentChars: Int, maxChars: Int)
+    fun setupCategoryTitleFieldView(currentChars: Int, maxChars: Int)
+    fun backToMainScreen()
 }

@@ -28,7 +28,7 @@ class CreateListPresenter @Inject constructor(
         this.view = view
         this.lifecycleCoroutineScope = lifecycleCoroutineScope
 
-        view.setupTitleFieldView(0, LIST_TITLE_MAX_CHARS)
+        view.setupTitleFieldView(0, PURCHASES_TITLE_MAX_CHARS)
 
         refreshCategories()
     }
@@ -61,6 +61,8 @@ class CreateListPresenter @Inject constructor(
             isVisible = chip.id == 0
         )
 
+        view.setupCategoryTitleFieldView(0, CATEGORY_TITLE_MAX_CHARS)
+
         setupCreateListButton()
     }
 
@@ -79,6 +81,7 @@ class CreateListPresenter @Inject constructor(
     }
 
     fun setNewCategoryTitle(categoryTitle: String) {
+        view.setupCategoryTitleFieldView(categoryTitle.length, CATEGORY_TITLE_MAX_CHARS)
         view.addCategoryButtonClickable(isEnabled = categoryTitle.isNotBlank())
     }
 
@@ -88,7 +91,7 @@ class CreateListPresenter @Inject constructor(
 
     fun getTitleText(text: String) {
         purchaseModel = purchaseModel.copy(title = text.trim())
-        view.setupTitleFieldView(text.length, LIST_TITLE_MAX_CHARS)
+        view.setupTitleFieldView(text.length, PURCHASES_TITLE_MAX_CHARS)
 
         setupCreateListButton()
     }
@@ -157,10 +160,13 @@ class CreateListPresenter @Inject constructor(
                 purchaseRepository.savePurchase(purchaseModel)
             }
         }
+
+        view.backToMainScreen()
     }
 
     companion object {
-        private const val LIST_TITLE_MAX_CHARS = 100
+        private const val PURCHASES_TITLE_MAX_CHARS = 100
+        private const val CATEGORY_TITLE_MAX_CHARS = 20
 
         private var purchaseModel: PurchaseModel = PurchaseModel()
 

@@ -136,12 +136,12 @@ class CreateListFragment : Fragment(), CreateListView {
             presenter.getTitleText(it.toString())
         }
 
-        binding.categoryNameEditText.addTextChangedListener {
-            presenter.setNewCategoryTitle(it.toString())
-        }
-
         binding.listEditText.addTextChangedListener {
             presenter.getProductsText(it.toString())
+        }
+
+        binding.categoryNameEditText.addTextChangedListener {
+            presenter.setNewCategoryTitle(it.toString())
         }
     }
 
@@ -156,6 +156,11 @@ class CreateListFragment : Fragment(), CreateListView {
     override fun setupTitleFieldView(currentChars: Int, maxChars: Int) {
         binding.titleEditText.filters = arrayOf(InputFilter.LengthFilter(maxChars))
         binding.titleTextLimit.text = getString(R.string.limit_chars_field, currentChars, maxChars)
+    }
+
+    override fun setupCategoryTitleFieldView(currentChars: Int, maxChars: Int) {
+        binding.categoryNameEditText.filters = arrayOf(InputFilter.LengthFilter(maxChars))
+        binding.categoryTitleLimit.text = getString(R.string.limit_chars_field, currentChars, maxChars)
     }
 
     private fun onChipClick(chipModel: CategoryModel) {
@@ -184,6 +189,10 @@ class CreateListFragment : Fragment(), CreateListView {
     override fun toggleEditCategoriesMode(isEnabled: Boolean) {
         val color = if (isEnabled) R.color.black else null
         binding.editCategoriesIcon.setTint(color)
+    }
+
+    override fun backToMainScreen() {
+        findNavController().popBackStack()
     }
 }
 
