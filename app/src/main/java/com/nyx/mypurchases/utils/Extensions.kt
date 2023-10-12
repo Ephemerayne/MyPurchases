@@ -1,5 +1,6 @@
-package com.nyx.mypurchases.extensions
+package com.nyx.mypurchases.utils
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.util.TypedValue
@@ -21,3 +22,10 @@ val Number.toPx
         this.toFloat(),
         Resources.getSystem().displayMetrics
     ).toInt()
+
+fun dpToFloat(context: Context, dp: Int): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(),
+        context.resources.displayMetrics
+    )
+}

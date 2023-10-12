@@ -19,9 +19,9 @@ import com.nyx.mypurchases.MainActivity
 import com.nyx.mypurchases.R
 import com.nyx.mypurchases.databinding.FragmentCreateListBinding
 import com.nyx.mypurchases.domain.entity.CategoryModel
-import com.nyx.mypurchases.extensions.setTint
 import com.nyx.mypurchases.ui.createlist.presenter.CreateListPresenter
 import com.nyx.mypurchases.ui.createlist.presenter.CreateListView
+import com.nyx.mypurchases.utils.setTint
 import javax.inject.Inject
 
 

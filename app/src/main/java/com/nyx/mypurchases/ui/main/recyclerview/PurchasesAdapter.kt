@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.nyx.mypurchases.R
 import com.nyx.mypurchases.domain.entity.PurchaseModel
-import com.nyx.mypurchases.extensions.toPx
+import com.nyx.mypurchases.utils.toPx
 
 
 internal class PurchasesAdapter() :
@@ -57,5 +57,12 @@ internal class PurchasesAdapter() :
 
     override fun getItemCount(): Int {
         return purchases.size
+    }
+
+
+    // TODO delete from database in presenter
+    fun removeAt(position: Int) {
+        purchases.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nyx.mypurchases.App
 import com.nyx.mypurchases.MainActivity
 import com.nyx.mypurchases.R
@@ -16,6 +18,7 @@ import com.nyx.mypurchases.domain.entity.PurchaseModel
 import com.nyx.mypurchases.ui.main.presenter.MainPresenter
 import com.nyx.mypurchases.ui.main.presenter.MainView
 import com.nyx.mypurchases.ui.main.recyclerview.PurchasesAdapter
+import com.nyx.mypurchases.utils.SwipeToDeleteCallback
 import javax.inject.Inject
 
 class MainFragment : Fragment(), MainView {
@@ -49,6 +52,16 @@ class MainFragment : Fragment(), MainView {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             purchasesAdapter = PurchasesAdapter()
             adapter = purchasesAdapter
+
+            val swipeHandler = object : SwipeToDeleteCallback(context) {
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    purchasesAdapter.removeAt(viewHolder.adapterPosition)
+                }
+            }
+
+            val itemTouchHelper = ItemTouchHelper(swipeHandler)
+            itemTouchHelper.attachToRecyclerView(binding.purchasesListRecyclerView)
         }
 
         presenter.attachView(this, viewLifecycleOwner.lifecycleScope)
