@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.nyx.mypurchases.R
 import com.nyx.mypurchases.domain.entity.PurchaseModel
+import com.nyx.mypurchases.extensions.toPx
 
 
 internal class PurchasesAdapter() :
@@ -22,9 +24,10 @@ internal class PurchasesAdapter() :
     }
 
     internal inner class PurchasesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title = itemView.findViewById<TextView>(R.id.purchases_title)
-        val purchasesList = itemView.findViewById<TextView>(R.id.purchases_list)
-        val purchasesCategory = itemView.findViewById<Chip>(R.id.purchases_category)
+        val cardView: CardView = itemView.findViewById(R.id.card_view_category)
+        val title: TextView = itemView.findViewById(R.id.purchases_title)
+        val purchasesList: TextView = itemView.findViewById(R.id.purchases_list)
+        val purchasesCategory: Chip = itemView.findViewById(R.id.purchases_category)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PurchasesViewHolder {
@@ -43,6 +46,13 @@ internal class PurchasesAdapter() :
         }
         holder.purchasesList.text = products
         holder.purchasesCategory.text = item.category.title
+
+        if (position == purchases.lastIndex) {
+            val params = holder.cardView.layoutParams as? ViewGroup.MarginLayoutParams
+            params?.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 88.toPx)
+
+            holder.cardView.layoutParams = params
+        }
     }
 
     override fun getItemCount(): Int {

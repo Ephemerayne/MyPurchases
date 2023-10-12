@@ -153,15 +153,13 @@ class CreateListPresenter @Inject constructor(
     }
 
     fun createList() {
-        println("debug: $purchaseModel")
-
         lifecycleCoroutineScope.launch {
-            CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.IO) {
                 purchaseRepository.savePurchase(purchaseModel)
             }
-        }
 
-        view.backToMainScreen()
+            view.backToMainScreen()
+        }
     }
 
     companion object {

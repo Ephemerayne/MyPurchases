@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import com.nyx.mypurchases.App
 import com.nyx.mypurchases.MainActivity
 import com.nyx.mypurchases.R
@@ -50,7 +49,6 @@ class MainFragment : Fragment(), MainView {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             purchasesAdapter = PurchasesAdapter()
             adapter = purchasesAdapter
-            LinearSnapHelper().attachToRecyclerView(this)
         }
 
         presenter.attachView(this, viewLifecycleOwner.lifecycleScope)

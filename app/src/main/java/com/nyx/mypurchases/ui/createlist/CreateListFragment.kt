@@ -67,6 +67,8 @@ class CreateListFragment : Fragment(), CreateListView {
         (activity as? MainActivity)?.setActionBarTitle(getString(R.string.create_list_app_bar_title))
     }
 
+
+    // update 1 chips not all
     override fun setupChips(
         categories: List<CategoryModel>,
         checkedId: Int?,

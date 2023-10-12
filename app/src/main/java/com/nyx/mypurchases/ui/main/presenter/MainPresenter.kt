@@ -24,7 +24,6 @@ class MainPresenter @Inject constructor(
         refreshPurchasesLists()
     }
 
-    // не работает с 1 айтемом
     private fun refreshPurchasesLists() {
         lifecycleCoroutineScope.launch {
             val purchases = withContext(Dispatchers.IO) {
