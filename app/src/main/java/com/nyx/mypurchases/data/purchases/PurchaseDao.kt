@@ -1,10 +1,10 @@
 package com.nyx.mypurchases.data.purchases
 
-import com.nyx.mypurchases.data.entities.PurchaseModelDatabaseEntity
+import com.nyx.mypurchases.data.entities.PurchaseRoomEntity
 
 interface PurchaseDao {
-    fun savePurchase(purchase: PurchaseModelDatabaseEntity): Long
-    fun updatePurchase(purchase: PurchaseModelDatabaseEntity)
-    fun deletePurchase(purchase: PurchaseModelDatabaseEntity)
-    fun getAllPurchases(): List<PurchaseModelDatabaseEntity>
+    fun savePurchase(purchase: PurchaseRoomEntity): Long
+    fun updatePurchase(purchase: PurchaseRoomEntity)
+    fun deletePurchase(purchase: PurchaseRoomEntity)
+    fun getAllPurchases(): List<PurchaseRoomEntity>
 }

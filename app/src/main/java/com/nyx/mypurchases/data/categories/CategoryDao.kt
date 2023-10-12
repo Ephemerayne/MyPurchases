@@ -1,18 +1,18 @@
 package com.nyx.mypurchases.data.categories
 
-import com.nyx.mypurchases.domain.entity.CategoryModel
+import com.nyx.mypurchases.data.entities.CategoryRoomEntity
 
 interface CategoryDao {
 
-    fun insertCategory(category: CategoryModel): Long
+    fun insertCategory(category: CategoryRoomEntity): Long
 
-    fun updateCategory(category: CategoryModel)
+    fun updateCategory(category: CategoryRoomEntity)
 
-    fun deleteCategory(category: CategoryModel)
+    fun deleteCategory(category: CategoryRoomEntity)
 
     fun deleteAllCustomCategories()
 
-    fun getAllCategories(): List<CategoryModel>
+    fun getAllCategories(): List<CategoryRoomEntity>
 
-    fun getCategory(id: Int): CategoryModel
+    fun getCategory(id: Int): CategoryRoomEntity
 }

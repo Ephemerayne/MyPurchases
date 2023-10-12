@@ -7,7 +7,8 @@ interface CreateListView {
     fun toggleEditCategoriesMode(isEnabled: Boolean)
     fun setDeleteCategoryVisibility(isAvailable: Boolean)
     fun setupChips(
-        categories: List<CategoryModel>, checkedId: Int?,
+        categories: List<CategoryModel>,
+        checkedId: Int?,
         isEditModeEnabled: Boolean,
     )
     fun addCategoryButtonClickable(isEnabled: Boolean)

@@ -3,11 +3,10 @@ package com.nyx.mypurchases.data.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "purchase_table")
-data class PurchaseModelDatabaseEntity(
+@Entity(tableName = "category_table")
+data class CategoryRoomEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String = "",
-    val purchases: List<String>? = null,
-    val categoryId: Int = 0,
+    val isCustom: Boolean = false,
 )

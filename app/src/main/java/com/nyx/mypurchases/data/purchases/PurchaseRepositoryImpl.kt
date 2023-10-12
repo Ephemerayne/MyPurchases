@@ -2,7 +2,7 @@ package com.nyx.mypurchases.data.purchases
 
 import com.nyx.mypurchases.data.categories.CategoryDao
 import com.nyx.mypurchases.data.mappers.toEntity
-import com.nyx.mypurchases.data.mappers.toPurchaseModel
+import com.nyx.mypurchases.data.mappers.toModel
 import com.nyx.mypurchases.domain.entity.PurchaseModel
 import com.nyx.mypurchases.domain.reposinterfaces.PurchaseRepository
 import javax.inject.Inject
@@ -26,7 +26,7 @@ class PurchaseRepositoryImpl @Inject constructor(
 
     override fun getAllPurchases(): List<PurchaseModel> {
         return purchaseDao.getAllPurchases().map {
-            it.toPurchaseModel(categoryDao.getCategory(it.categoryId))
+            it.toModel(categoryDao.getCategory(it.categoryId).toModel())
         }
     }
 }

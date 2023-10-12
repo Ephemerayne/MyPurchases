@@ -6,20 +6,20 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.nyx.mypurchases.data.entities.PurchaseModelDatabaseEntity
+import com.nyx.mypurchases.data.entities.PurchaseRoomEntity
 
 @Dao
 interface PurchaseDataRoomImpl: PurchaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override fun savePurchase(purchase: PurchaseModelDatabaseEntity): Long
+    override fun savePurchase(purchase: PurchaseRoomEntity): Long
 
     @Update
-    override fun updatePurchase(purchase: PurchaseModelDatabaseEntity)
+    override fun updatePurchase(purchase: PurchaseRoomEntity)
 
     @Delete
-    override fun deletePurchase(purchase: PurchaseModelDatabaseEntity)
+    override fun deletePurchase(purchase: PurchaseRoomEntity)
 
     @Query("SELECT * FROM purchase_table")
-    override fun getAllPurchases(): List<PurchaseModelDatabaseEntity>
+    override fun getAllPurchases(): List<PurchaseRoomEntity>
 }
