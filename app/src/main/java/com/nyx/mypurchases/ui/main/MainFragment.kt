@@ -52,22 +52,29 @@ class MainFragment : Fragment(), MainView {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             purchasesAdapter = PurchasesAdapter()
             adapter = purchasesAdapter
-
-            val swipeHandler = object : SwipeToDeleteCallback(context) {
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    purchasesAdapter.removeAt(viewHolder.adapterPosition)
-                }
-            }
-
-            val itemTouchHelper = ItemTouchHelper(swipeHandler)
-            itemTouchHelper.attachToRecyclerView(binding.purchasesListRecyclerView)
         }
+
+        initSwipeHandler()
 
         presenter.attachView(this, viewLifecycleOwner.lifecycleScope)
 
         setButtonsListeners()
 
+    }
+
+    private fun initSwipeHandler() {
+        val swipeHandler = object : SwipeToDeleteCallback(requireContext()) {
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val purchase = purchasesAdapter.getPurchasesList[viewHolder.adapterPosition]
+                purchasesAdapter.removeAt(viewHolder.adapterPosition)
+
+                presenter.removePurchase(purchase.id)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(binding.purchasesListRecyclerView)
     }
 
     override fun onResume() {

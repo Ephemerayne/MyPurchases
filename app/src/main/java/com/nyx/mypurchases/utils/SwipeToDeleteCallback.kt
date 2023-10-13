@@ -12,13 +12,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.nyx.mypurchases.R
 
-
 abstract class SwipeToDeleteCallback(context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
-    private val deleteIcon = ContextCompat.getDrawable(context, android.R.drawable.ic_menu_delete)!!
-    private val intrinsicWidth = deleteIcon.intrinsicWidth
-    private val intrinsicHeight = deleteIcon.intrinsicHeight
+    private val deleteIcon = ContextCompat.getDrawable(context, android.R.drawable.ic_menu_delete)
+    private val intrinsicWidth = deleteIcon?.intrinsicWidth
+    private val intrinsicHeight = deleteIcon?.intrinsicHeight
     private val background = GradientDrawable()
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
 
@@ -48,6 +47,10 @@ abstract class SwipeToDeleteCallback(context: Context) :
         actionState: Int,
         isCurrentlyActive: Boolean,
     ) {
+        intrinsicHeight ?: return
+        intrinsicWidth ?: return
+        deleteIcon ?: return
+
         val itemView = viewHolder.itemView
         val itemHeight = itemView.bottom - itemView.top
         val isCanceled = dX == 0f && !isCurrentlyActive

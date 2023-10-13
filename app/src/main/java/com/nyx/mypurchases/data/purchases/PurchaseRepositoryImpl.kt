@@ -20,8 +20,8 @@ class PurchaseRepositoryImpl @Inject constructor(
         purchaseDao.updatePurchase(purchase.toEntity())
     }
 
-    override fun deletePurchase(purchase: PurchaseModel) {
-        purchaseDao.deletePurchase(purchase.toEntity())
+    override fun deletePurchase(purchaseId: Long) {
+        purchaseDao.deletePurchase(purchaseId)
     }
 
     override fun getAllPurchases(): List<PurchaseModel> {

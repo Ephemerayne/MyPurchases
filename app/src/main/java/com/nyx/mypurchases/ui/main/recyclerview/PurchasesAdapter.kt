@@ -16,6 +16,7 @@ internal class PurchasesAdapter() :
     RecyclerView.Adapter<PurchasesAdapter.PurchasesViewHolder>() {
 
     private val purchases = mutableListOf<PurchaseModel>()
+    val getPurchasesList get(): List<PurchaseModel> = purchases
 
     fun setPurchasesList(purchases: List<PurchaseModel>) {
         this.purchases.clear()

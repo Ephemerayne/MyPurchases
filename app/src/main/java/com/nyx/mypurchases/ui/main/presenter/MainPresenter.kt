@@ -33,4 +33,12 @@ class MainPresenter @Inject constructor(
             view.setupPurchasesList(purchases)
         }
     }
+
+    fun removePurchase(purchaseId: Int) {
+        lifecycleCoroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                purchaseRepository.deletePurchase(purchaseId.toLong())
+            }
+        }
+    }
 }
