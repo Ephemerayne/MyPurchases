@@ -41,8 +41,10 @@ internal class PurchasesAdapter() :
         val item = purchases[position]
         holder.title.text = item.title
         val products = buildString {
-            item.purchases?.forEach {
-                append(it)
+            item.purchases?.forEachIndexed { index, text ->
+                append(text)
+
+                if (index != item.purchases.lastIndex) append(", ")
             }
         }
         holder.purchasesList.text = products
