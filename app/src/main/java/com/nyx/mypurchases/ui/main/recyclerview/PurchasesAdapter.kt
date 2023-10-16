@@ -11,10 +11,12 @@ import com.nyx.mypurchases.R
 import com.nyx.mypurchases.domain.entity.PurchaseModel
 import com.nyx.mypurchases.utils.toPx
 
+private typealias OnPurchaseClick = (purchaseId: Int) -> Unit
 
-internal class PurchasesAdapter() :
+internal class PurchasesAdapter :
     RecyclerView.Adapter<PurchasesAdapter.PurchasesViewHolder>() {
 
+    var onPurchaseClick: OnPurchaseClick? = null
     private val purchases = mutableListOf<PurchaseModel>()
     val getPurchasesList get(): List<PurchaseModel> = purchases
 
@@ -25,6 +27,12 @@ internal class PurchasesAdapter() :
     }
 
     internal inner class PurchasesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        init {
+            itemView.setOnClickListener {
+                onPurchaseClick?.invoke(purchases[adapterPosition].id)
+            }
+        }
+
         val cardView: CardView = itemView.findViewById(R.id.card_view_category)
         val title: TextView = itemView.findViewById(R.id.purchases_title)
         val purchasesList: TextView = itemView.findViewById(R.id.purchases_list)
@@ -41,10 +49,10 @@ internal class PurchasesAdapter() :
         val item = purchases[position]
         holder.title.text = item.title
         val products = buildString {
-            item.purchases?.forEachIndexed { index, text ->
-                append(text)
+            item.products.forEachIndexed { index, product ->
+                append(product.title)
 
-                if (index != item.purchases.lastIndex) append(", ")
+                if (index != item.products.lastIndex) append(", ")
             }
         }
         holder.purchasesList.text = products
@@ -62,8 +70,6 @@ internal class PurchasesAdapter() :
         return purchases.size
     }
 
-
-    // TODO delete from database in presenter
     fun removeAt(position: Int) {
         purchases.removeAt(position)
         notifyItemRemoved(position)

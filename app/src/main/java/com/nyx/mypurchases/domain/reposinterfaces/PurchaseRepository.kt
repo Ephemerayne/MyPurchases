@@ -1,5 +1,6 @@
 package com.nyx.mypurchases.domain.reposinterfaces
 
+import androidx.lifecycle.LiveData
 import com.nyx.mypurchases.domain.entity.PurchaseModel
 
 interface PurchaseRepository {
@@ -7,4 +8,5 @@ interface PurchaseRepository {
     fun updatePurchase(purchase: PurchaseModel)
     fun deletePurchase(purchaseId: Long)
     fun getAllPurchases(): List<PurchaseModel>
+    fun getPurchaseInfo(purchaseId: Long): LiveData<PurchaseModel>
 }

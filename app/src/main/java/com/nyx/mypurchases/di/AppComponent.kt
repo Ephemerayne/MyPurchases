@@ -12,6 +12,7 @@ import com.nyx.mypurchases.di.modules.purchases.PurchaseDatabaseModule
 import com.nyx.mypurchases.di.modules.purchases.PurchaseRepositoryModule
 import com.nyx.mypurchases.ui.createlist.CreateListFragment
 import com.nyx.mypurchases.ui.main.MainFragment
+import com.nyx.mypurchases.ui.viewingpurchases.ViewingProductsFragment
 import dagger.Component
 
 @Component(
@@ -26,7 +27,8 @@ import dagger.Component
         /* Purchases */
         PurchaseDatabaseModule::class,
         PurchaseDaoModule::class,
-        PurchaseRepositoryModule::class
+        PurchaseRepositoryModule::class,
+        ViewModelsModule::class
     ]
 )
 
@@ -34,4 +36,6 @@ interface AppComponent {
     fun injectActivity(application: Application)
     fun injectMainFragment(fragment: MainFragment)
     fun injectCreateListFragment(fragment: CreateListFragment)
+
+    fun inject(viewingProductsFragment: ViewingProductsFragment)
 }

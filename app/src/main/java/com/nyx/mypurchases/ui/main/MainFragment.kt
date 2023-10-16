@@ -18,6 +18,7 @@ import com.nyx.mypurchases.domain.entity.PurchaseModel
 import com.nyx.mypurchases.ui.main.presenter.MainPresenter
 import com.nyx.mypurchases.ui.main.presenter.MainView
 import com.nyx.mypurchases.ui.main.recyclerview.PurchasesAdapter
+import com.nyx.mypurchases.ui.viewingpurchases.ViewingProductsFragment.Companion.ARGS_KEY
 import com.nyx.mypurchases.utils.SwipeToDeleteCallback
 import javax.inject.Inject
 
@@ -48,18 +49,30 @@ class MainFragment : Fragment(), MainView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupPurchasesRecyclerAdapter()
+        initSwipeHandler()
+        setButtonsListeners()
+
+        presenter.attachView(this, viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun setupPurchasesRecyclerAdapter() {
         binding.purchasesListRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             purchasesAdapter = PurchasesAdapter()
             adapter = purchasesAdapter
         }
 
-        initSwipeHandler()
+        purchasesAdapter.onPurchaseClick = { purchaseId ->
+            Bundle().apply {
+                putInt(ARGS_KEY, purchaseId)
 
-        presenter.attachView(this, viewLifecycleOwner.lifecycleScope)
-
-        setButtonsListeners()
-
+                findNavController().navigate(
+                    R.id.action_FirstFragment_to_viewingPurchasesFragment,
+                    this
+                )
+            }
+        }
     }
 
     private fun initSwipeHandler() {

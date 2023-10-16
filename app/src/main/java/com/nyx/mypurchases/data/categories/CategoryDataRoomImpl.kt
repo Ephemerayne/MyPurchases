@@ -1,5 +1,6 @@
 package com.nyx.mypurchases.data.categories
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -26,6 +27,12 @@ interface CategoryDataRoomImpl : CategoryDao {
     @Query("SELECT * FROM category_table")
     override fun getAllCategories(): List<CategoryRoomEntity>
 
+    @Query("SELECT * FROM category_table")
+    override fun getAllCategoriesLiveData(): LiveData<List<CategoryRoomEntity>>
+
     @Query("SELECT * FROM category_table WHERE id=:id")
     override fun getCategory(id: Int): CategoryRoomEntity
+
+    @Query("SELECT * FROM category_table WHERE id=:id")
+    override fun getCategoryLiveData(id: Int): LiveData<CategoryRoomEntity>
 }

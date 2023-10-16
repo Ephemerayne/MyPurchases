@@ -13,14 +13,21 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_viewingPurchasesFragment"
+            app:destination="@id/viewingPurchasesFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.nyx.mypurchases.ui.createlist.CreateListFragment"
         tools:layout="@layout/fragment_create_list">
-
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/viewingPurchasesFragment"
+        android:name="com.nyx.mypurchases.ui.viewingpurchases.ViewingProductsFragment"
+        android:label="fragment_viewing_purchases"
+        tools:layout="@layout/fragment_viewing_products" />
 </navigation>

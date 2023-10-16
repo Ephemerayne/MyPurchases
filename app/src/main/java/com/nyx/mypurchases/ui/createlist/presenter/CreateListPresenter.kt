@@ -3,6 +3,7 @@ package com.nyx.mypurchases.ui.createlist.presenter
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.android.material.chip.Chip
 import com.nyx.mypurchases.domain.entity.CategoryModel
+import com.nyx.mypurchases.domain.entity.ProductModel
 import com.nyx.mypurchases.domain.entity.PurchaseModel
 import com.nyx.mypurchases.domain.reposinterfaces.CategoryRepository
 import com.nyx.mypurchases.domain.reposinterfaces.PurchaseRepository
@@ -98,7 +99,9 @@ class CreateListPresenter @Inject constructor(
 
     fun getProductsText(text: String) {
         val productsList = text.trim().split(",")
-        purchaseModel = purchaseModel.copy(purchases = productsList)
+        purchaseModel = purchaseModel.copy(
+            products = productsList.map { ProductModel(title = it) }
+        )
 
         setupCreateListButton()
     }
@@ -170,7 +173,7 @@ class CreateListPresenter @Inject constructor(
 
         private fun isCreateListButtonEnabled(): Boolean {
             return with(purchaseModel) {
-                purchases?.isNotEmpty() == true && title.isNotBlank() && category.id != 0
+                products?.isNotEmpty() == true && title.isNotBlank() && category.id != 0
             }
         }
     }

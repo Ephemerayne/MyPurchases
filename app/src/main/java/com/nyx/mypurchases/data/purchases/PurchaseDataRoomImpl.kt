@@ -1,5 +1,6 @@
 package com.nyx.mypurchases.data.purchases
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -21,4 +22,7 @@ interface PurchaseDataRoomImpl : PurchaseDao {
 
     @Query("SELECT * FROM purchase_table")
     override fun getAllPurchases(): List<PurchaseRoomEntity>
+
+    @Query("SELECT * FROM purchase_table WHERE id=:purchaseId")
+    override fun getPurchaseInfo(purchaseId: Long): LiveData<PurchaseRoomEntity>
 }

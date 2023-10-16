@@ -1,5 +1,6 @@
 package com.nyx.mypurchases.data.categories
 
+import androidx.lifecycle.LiveData
 import com.nyx.mypurchases.data.entities.CategoryRoomEntity
 
 interface CategoryDao {
@@ -14,5 +15,9 @@ interface CategoryDao {
 
     fun getAllCategories(): List<CategoryRoomEntity>
 
+    fun getAllCategoriesLiveData(): LiveData<List<CategoryRoomEntity>>
+
     fun getCategory(id: Int): CategoryRoomEntity
+
+    fun getCategoryLiveData(id: Int): LiveData<CategoryRoomEntity>
 }

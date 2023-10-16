@@ -79,7 +79,6 @@ class CreateListFragment : Fragment(), CreateListView {
         categories.forEachIndexed { index, category ->
             val chip = Chip(this.context)
             chip.text = category.title
-
             chip.isCheckable = true
 
             if (!isEditModeEnabled) {
