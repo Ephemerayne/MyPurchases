@@ -8,14 +8,20 @@ import com.nyx.mypurchases.domain.entity.ProductModel
 import com.nyx.mypurchases.domain.entity.PurchaseModel
 
 fun PurchaseModel.toEntity(): PurchaseRoomEntity =
-    PurchaseRoomEntity(id, title, category.id, products)
+    PurchaseRoomEntity(id, title, category.id)
 
-fun PurchaseRoomEntity.toModel(category: CategoryModel): PurchaseModel =
-    PurchaseModel(id, title, products, category)
+fun PurchaseRoomEntity.toModel(
+    category: CategoryModel,
+    products: List<ProductModel>,
+): PurchaseModel =
+    PurchaseModel(id, title, category, products)
 
 fun CategoryModel.toEntity(): CategoryRoomEntity = CategoryRoomEntity(id, title, isCustom)
 fun CategoryRoomEntity.toModel(): CategoryModel =
     CategoryModel(id, title, isCustom)
 
-fun ProductModel.toProductModelEntity(): ProductRoomEntity = ProductRoomEntity(id, title)
-fun ProductRoomEntity.toProductModel(): ProductModel = ProductModel(id, title)
+fun ProductModel.toEntity(purchaseId: Int): ProductRoomEntity =
+    ProductRoomEntity(id, purchaseId, title)
+
+fun ProductRoomEntity.toProductModel(purchaseId: Int): ProductModel =
+    ProductModel(id, purchaseId, title)

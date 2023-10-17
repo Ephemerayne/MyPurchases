@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nyx.mypurchases.data.entities.ProductRoomEntity
 import com.nyx.mypurchases.data.entities.PurchaseRoomEntity
+import com.nyx.mypurchases.data.products.ProductDaoRoomImpl
 import com.nyx.mypurchases.domain.converters.Converters
 
 @Database(
@@ -18,7 +19,8 @@ import com.nyx.mypurchases.domain.converters.Converters
 @TypeConverters(Converters::class)
 abstract class PurchaseDatabase : RoomDatabase() {
 
-    abstract fun purchaseDao(): PurchaseDataRoomImpl
+    abstract fun purchaseDao(): PurchaseDaoRoomImpl
+    abstract fun productDao(): ProductDaoRoomImpl
 
     companion object {
 

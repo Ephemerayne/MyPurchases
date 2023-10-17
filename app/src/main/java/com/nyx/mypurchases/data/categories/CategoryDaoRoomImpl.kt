@@ -10,7 +10,7 @@ import androidx.room.Update
 import com.nyx.mypurchases.data.entities.CategoryRoomEntity
 
 @Dao
-interface CategoryDataRoomImpl : CategoryDao {
+interface CategoryDaoRoomImpl : CategoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun insertCategory(category: CategoryRoomEntity): Long

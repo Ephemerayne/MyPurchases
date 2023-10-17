@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class ProductRoomEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val title: String,
+    val purchaseId: Int,
+    val title: String = "",
 )

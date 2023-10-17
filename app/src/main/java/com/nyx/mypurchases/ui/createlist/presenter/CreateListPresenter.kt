@@ -158,7 +158,7 @@ class CreateListPresenter @Inject constructor(
     fun createList() {
         lifecycleCoroutineScope.launch {
             withContext(Dispatchers.IO) {
-                purchaseRepository.savePurchase(purchaseModel)
+                purchaseRepository.savePurchase(purchaseModel, purchaseModel.products)
             }
 
             view.backToMainScreen()
@@ -173,7 +173,7 @@ class CreateListPresenter @Inject constructor(
 
         private fun isCreateListButtonEnabled(): Boolean {
             return with(purchaseModel) {
-                products?.isNotEmpty() == true && title.isNotBlank() && category.id != 0
+                products.isNotEmpty() && title.isNotBlank() && category.id != 0
             }
         }
     }

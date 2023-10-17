@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @TypeConverters(Converters::class)
 abstract class CategoryDatabase : RoomDatabase() {
 
-    abstract fun categoryDao(): CategoryDataRoomImpl
+    abstract fun categoryDao(): CategoryDaoRoomImpl
 
     companion object {
 

@@ -7,6 +7,7 @@ import com.nyx.mypurchases.di.modules.FragmentModule
 import com.nyx.mypurchases.di.modules.categories.CategoryDaoModule
 import com.nyx.mypurchases.di.modules.categories.CategoryDatabaseModule
 import com.nyx.mypurchases.di.modules.categories.CategoryRepositoryModule
+import com.nyx.mypurchases.di.modules.products.ProductDaoModule
 import com.nyx.mypurchases.di.modules.purchases.PurchaseDaoModule
 import com.nyx.mypurchases.di.modules.purchases.PurchaseDatabaseModule
 import com.nyx.mypurchases.di.modules.purchases.PurchaseRepositoryModule
@@ -28,6 +29,8 @@ import dagger.Component
         PurchaseDatabaseModule::class,
         PurchaseDaoModule::class,
         PurchaseRepositoryModule::class,
+        /* Products */
+        ProductDaoModule::class,
         ViewModelsModule::class
     ]
 )

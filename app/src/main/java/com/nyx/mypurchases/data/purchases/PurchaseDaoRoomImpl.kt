@@ -9,7 +9,7 @@ import androidx.room.Update
 import com.nyx.mypurchases.data.entities.PurchaseRoomEntity
 
 @Dao
-interface PurchaseDataRoomImpl : PurchaseDao {
+interface PurchaseDaoRoomImpl : PurchaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun savePurchase(purchase: PurchaseRoomEntity): Long
