@@ -64,7 +64,7 @@ class CreateListFragment : Fragment(), CreateListView {
     override fun onResume() {
         super.onResume()
 
-        (activity as? MainActivity)?.setActionBarTitle(getString(R.string.create_list_app_bar_title))
+        (activity as? MainActivity)?.setupActionBar(getString(R.string.create_list_app_bar_title))
     }
 
 

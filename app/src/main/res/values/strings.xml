@@ -14,4 +14,5 @@
     <string name="edit_icon_desc">Редактировать</string>
     <string name="delete_item_snackbar_title">Удаление</string>
     <string name="delete_item_snackbar_action">Отмена</string>
+    <string name="floating_button_add_list_desc">Добавить список</string>
 </resources>

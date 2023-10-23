@@ -1,9 +1,9 @@
 package com.nyx.mypurchases
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.navigation.findNavController
 import com.nyx.mypurchases.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,11 +16,21 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
     }
 
-    fun setActionBarTitle(title: String?) {
+    fun setupActionBar(
+        title: String?,
+        chipText: String? = null,
+        onCategoryClick: (() -> Unit)? = null,
+    ) {
         binding.appBarText.text = title
+        binding.appBarCategoryChip.text = chipText
+
+        if (chipText != null) {
+            binding.appBarCategoryChip.visibility = View.VISIBLE
+            binding.appBarCategoryChip.setOnClickListener { onCategoryClick?.invoke() }
+        } else {
+            binding.appBarCategoryChip.visibility = View.INVISIBLE
+        }
     }
 }

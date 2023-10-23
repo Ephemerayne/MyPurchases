@@ -57,14 +57,16 @@ class ViewingProductsFragment : Fragment() {
 
         purchaseId?.let {
             viewModel.getPurchaseInfo(it).observe(viewLifecycleOwner) { purchase ->
-                setAppBarTitle(purchase.title)
+                setupAppBar(purchase.title, purchase.category.title) {
+                    println("debug: OnCategoryClicked")
+                }
                 productsAdapter.setProductsList(purchase.products)
             }
         }
     }
 
-    private fun setAppBarTitle(title: String) {
-        (activity as? MainActivity)?.setActionBarTitle(title)
+    private fun setupAppBar(title: String, category: String, onCategoryClick: () -> Unit) {
+        (activity as? MainActivity)?.setupActionBar(title, category, onCategoryClick)
     }
 
     private fun setupProductsRecyclerAdapter() {

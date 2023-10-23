@@ -92,7 +92,7 @@ class MainFragment : Fragment(), MainView {
     override fun onResume() {
         super.onResume()
 
-        (activity as? MainActivity)?.setActionBarTitle(getString(R.string.main_app_bar_title))
+        (activity as? MainActivity)?.setupActionBar(getString(R.string.main_app_bar_title))
         println("debug: ONRESUME")
     }
 
