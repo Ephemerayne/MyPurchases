@@ -9,4 +9,5 @@ data class ProductRoomEntity(
     val id: Int = 0,
     val purchaseId: Int,
     val title: String = "",
+    val isChecked: Boolean = false
 )

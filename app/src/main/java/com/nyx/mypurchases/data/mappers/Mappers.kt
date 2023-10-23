@@ -21,7 +21,7 @@ fun CategoryRoomEntity.toModel(): CategoryModel =
     CategoryModel(id, title, isCustom)
 
 fun ProductModel.toEntity(purchaseId: Int): ProductRoomEntity =
-    ProductRoomEntity(id, purchaseId, title)
+    ProductRoomEntity(id, purchaseId, title, isChecked)
 
 fun ProductRoomEntity.toProductModel(purchaseId: Int): ProductModel =
-    ProductModel(id, purchaseId, title)
+    ProductModel(id, purchaseId, title, isChecked)

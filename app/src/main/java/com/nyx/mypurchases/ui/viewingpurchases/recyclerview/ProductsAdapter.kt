@@ -3,17 +3,18 @@ package com.nyx.mypurchases.ui.viewingpurchases.recyclerview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nyx.mypurchases.R
 import com.nyx.mypurchases.domain.entity.ProductModel
 
-private typealias OnProductClick = (productId: Int) -> Unit
+internal class ProductsAdapter(
+    val onProductClick: (product: ProductModel, isChecked: Boolean) -> Unit,
+    val onScrollToTop: () -> Unit,
+) :
+    RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder>() {
 
-internal class ProductsAdapter(val onProductClick: OnProductClick) :
-    RecyclerView.Adapter<ProductsAdapter.PurchasesViewHolder>() {
-
-//    var onProductClick: OnProductClick? = null
     private val products = mutableListOf<ProductModel>()
     val getProductsList get(): List<ProductModel> = products
 
@@ -23,28 +24,28 @@ internal class ProductsAdapter(val onProductClick: OnProductClick) :
         notifyDataSetChanged()
     }
 
-    internal inner class PurchasesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    internal inner class ProductsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
             itemView.setOnClickListener {
-                println("debug: ololo")
-                onProductClick.invoke(products[adapterPosition].id)
+                checkbox.isChecked = !checkbox.isChecked
+                onProductClick.invoke(products[adapterPosition], checkbox.isChecked)
             }
         }
 
-      //  val cardView: CardView = itemView.findViewById(R.id.product_card_view)
         val title: TextView = itemView.findViewById(R.id.product_title)
-      //  val checkbox: CheckBox = itemView.findViewById(R.id.product_checkbox)
+        val checkbox: CheckBox = itemView.findViewById(R.id.product_checkbox)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PurchasesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.product_item, parent, false)
-        return PurchasesViewHolder(itemView)
+        return ProductsViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: PurchasesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
         val item = products[position]
         holder.title.text = item.title
+        holder.checkbox.isChecked = item.isChecked
     }
 
     override fun getItemCount(): Int {
@@ -54,5 +55,14 @@ internal class ProductsAdapter(val onProductClick: OnProductClick) :
     fun removeAt(position: Int) {
         products.removeAt(position)
         notifyItemRemoved(position)
+    }
+
+    fun backDeletedItem(product: Pair<Int, ProductModel>) {
+        products.add(product.first, product.second)
+        notifyItemInserted(product.first)
+
+        if (product.first == 0) {
+            onScrollToTop()
+        }
     }
 }

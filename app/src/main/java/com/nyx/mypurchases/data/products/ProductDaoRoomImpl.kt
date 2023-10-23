@@ -37,4 +37,7 @@ interface ProductDaoRoomImpl : ProductDao {
 
     @Query("SELECT * FROM product_table WHERE purchaseId=:purchaseId")
     override fun getPurchaseProductsSync(purchaseId: Int): List<ProductRoomEntity>
+
+    @Query("DELETE FROM product_table WHERE id IN (:productsIds)")
+    override fun deleteProducts(productsIds: List<Int>)
 }

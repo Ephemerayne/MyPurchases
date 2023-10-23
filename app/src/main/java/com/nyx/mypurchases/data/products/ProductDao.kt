@@ -17,6 +17,8 @@ interface ProductDao {
 
     fun deleteProducts()
 
+    fun deleteProducts(productsIds: List<Int>)
+
     fun getProduct(id: Int): ProductRoomEntity
 
     fun getPurchaseProducts(purchaseId: Int): LiveData<List<ProductRoomEntity>>

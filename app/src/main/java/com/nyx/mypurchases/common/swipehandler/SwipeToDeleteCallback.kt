@@ -1,4 +1,4 @@
-package com.nyx.mypurchases.utils
+package com.nyx.mypurchases.common.swipehandler
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -11,8 +11,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.nyx.mypurchases.R
+import com.nyx.mypurchases.utils.dpToFloat
 
-abstract class SwipeToDeleteCallback(context: Context) :
+abstract class SwipeToDeleteCallback(
+    context: Context,
+    private val cornerRadiusDp: Int? = null,
+) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     private val deleteIcon = ContextCompat.getDrawable(context, android.R.drawable.ic_menu_delete)
@@ -71,13 +75,14 @@ abstract class SwipeToDeleteCallback(context: Context) :
         background.color = ColorStateList.valueOf(
             ContextCompat.getColor(recyclerView.context, R.color.delete_item_background)
         )
-        background.cornerRadius = dpToFloat(recyclerView.context, 8)
         background.setStroke(
-            1,
+            2,
             ColorStateList.valueOf(
                 ContextCompat.getColor(recyclerView.context, android.R.color.transparent)
             )
         )
+
+        if (cornerRadiusDp != null) setCorners(recyclerView, cornerRadiusDp)
 
         background.setBounds(
             itemView.right + dX.toInt() - 40,
@@ -103,5 +108,9 @@ abstract class SwipeToDeleteCallback(context: Context) :
 
     private fun clearCanvas(c: Canvas?, left: Float, top: Float, right: Float, bottom: Float) {
         c?.drawRect(left, top, right, bottom, clearPaint)
+    }
+
+    private fun setCorners(recyclerView: RecyclerView, cornerRadiusDp: Int) {
+        background.cornerRadius = dpToFloat(recyclerView.context, cornerRadiusDp)
     }
 }
