@@ -4,4 +4,14 @@
     <color name="white">#FFFFFFFF</color>
     <color name="selected_chip">#678DB5</color>
     <color name="delete_item_background">#f44336</color>
+    <color name="app_color_light">#FFF6DC</color>
+    <color name="app_color_dark">#C4C1A4</color>
+
+    <color name="graphite">#3C4444</color>
+
+    <color name="test1">#F6F1EE</color>
+    <color name="test2">#FFC6AC</color>
+    <color name="test22">#8AFBF0EA</color>
+    <color name="test3">#9E9FA5</color>
+    <color name="test4">#C4C1A4</color>
 </resources>

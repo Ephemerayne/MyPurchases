@@ -161,7 +161,8 @@ class CreateListFragment : Fragment(), CreateListView {
 
     override fun setupCategoryTitleFieldView(currentChars: Int, maxChars: Int) {
         binding.categoryNameEditText.filters = arrayOf(InputFilter.LengthFilter(maxChars))
-        binding.categoryTitleLimit.text = getString(R.string.limit_chars_field, currentChars, maxChars)
+        binding.categoryTitleLimit.text =
+            getString(R.string.limit_chars_field, currentChars, maxChars)
     }
 
     private fun onChipClick(chipModel: CategoryModel) {

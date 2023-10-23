@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         if (chipText != null) {
             binding.appBarCategoryChip.visibility = View.VISIBLE
-            binding.appBarCategoryChip.setOnClickListener { onCategoryClick?.invoke() }
+         //   binding.appBarCategoryChip.setOnClickListener { onCategoryClick?.invoke() }
         } else {
             binding.appBarCategoryChip.visibility = View.INVISIBLE
         }
