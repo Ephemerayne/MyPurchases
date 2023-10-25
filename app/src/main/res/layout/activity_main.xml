@@ -29,6 +29,27 @@
                 android:layout_weight="1"
                 tools:text="TEST" />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/add_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="16dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/app_color_light"
+                    android:contentDescription="@string/floating_button_add_list_desc"
+                    android:padding="4dp"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_input_add"
+                    app:tint="@color/graphite" />
+
+            </androidx.cardview.widget.CardView>
+
             <com.google.android.material.chip.Chip
                 android:id="@+id/app_bar_category_chip"
                 android:layout_width="wrap_content"

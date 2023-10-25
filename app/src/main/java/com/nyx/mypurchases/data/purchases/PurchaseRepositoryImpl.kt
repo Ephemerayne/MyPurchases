@@ -50,7 +50,7 @@ class PurchaseRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getPurchaseInfo(purchaseId: Long): LiveData<PurchaseModel> {
+    override fun getPurchaseInfo(purchaseId: Long): LiveData<PurchaseModel?> {
         return MediatorLiveData<PurchaseModel>().apply {
             addSource(purchaseDao.getPurchaseInfo(purchaseId)) { purchase ->
                 addSource(categoryDao.getCategoryLiveData(purchase.categoryId)) { category ->
@@ -67,5 +67,9 @@ class PurchaseRepositoryImpl @Inject constructor(
 
     override fun deleteProducts(productsIds: List<Int>) {
         productDao.deleteProducts(productsIds)
+    }
+
+    override fun deleteProduct(productsId: Int) {
+        productDao.deleteProduct(productsId)
     }
 }

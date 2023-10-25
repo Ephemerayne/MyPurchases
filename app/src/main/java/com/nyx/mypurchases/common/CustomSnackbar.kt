@@ -11,7 +11,7 @@ class CustomSnackbar {
 
     fun createActionSnackbar(
         view: View,
-        duration: Int = 5000,
+        duration: Long = 5000L,
         actionText: String? = null,
         actionColor: Int = R.color.white,
         snackbarBackgroundColor: Int = android.R.color.darker_gray,
@@ -19,7 +19,7 @@ class CustomSnackbar {
         textSize: Float = 14f,
         action: () -> Unit,
     ) {
-        val snackbar = Snackbar.make(view, R.string.delete_item_snackbar_title, duration)
+        val snackbar = Snackbar.make(view, R.string.delete_item_snackbar_title, duration.toInt())
             .setAction(actionText.orEmpty()) { action() }
             .setActionTextColor(
                 ColorStateList.valueOf(

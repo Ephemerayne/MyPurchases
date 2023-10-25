@@ -13,7 +13,7 @@ interface ProductDao {
 
     fun updateProducts(products: List<ProductRoomEntity>)
 
-    fun deleteProduct(productId: Long)
+    fun deleteProduct(productId: Int)
 
     fun deleteProducts()
 

@@ -57,12 +57,17 @@ internal class ProductsAdapter(
         notifyItemRemoved(position)
     }
 
-    fun backDeletedItem(product: Pair<Int, ProductModel>) {
-        products.add(product.first, product.second)
-        notifyItemInserted(product.first)
+   /* fun backDeletedItems(deletedProducts: MutableList<Pair<Int, ProductModel>>) {
+        println("debug: $deletedProducts")
+        for (product in deletedProducts) {
+            products.add(product.first, product.second)
+            notifyItemInserted(product.first)
 
-        if (product.first == 0) {
-            onScrollToTop()
+            if (product.first == 0) {
+                onScrollToTop()
+            }
         }
-    }
+
+        deletedProducts.clear()
+    }*/
 }
