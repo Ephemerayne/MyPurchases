@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
     fun setupActionBar(
         title: String?,
         chipText: String? = null,
-//        onCategoryClick: (() -> Unit)? = null,
         onAddProductClick: (() -> Unit)? = null,
+        onCategoryClick: (() -> Unit)? = null,
     ) {
         binding.appBarText.text = title
         binding.appBarCategoryChip.text = chipText
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             binding.appBarCategoryChip.visibility = View.VISIBLE
             binding.addProduct.visibility = View.VISIBLE
             binding.addProduct.setOnClickListener { onAddProductClick?.invoke() }
-            //   binding.appBarCategoryChip.setOnClickListener { onCategoryClick?.invoke() }
+            binding.appBarCategoryChip.setOnClickListener { onCategoryClick?.invoke() }
         } else {
             binding.appBarCategoryChip.visibility = View.INVISIBLE
             binding.addProduct.visibility = View.GONE

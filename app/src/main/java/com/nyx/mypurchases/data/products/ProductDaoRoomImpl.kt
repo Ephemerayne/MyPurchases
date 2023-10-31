@@ -20,9 +20,6 @@ interface ProductDaoRoomImpl : ProductDao {
     @Update
     override fun updateProduct(product: ProductRoomEntity)
 
-    @Update
-    override fun updateProducts(products: List<ProductRoomEntity>)
-
     @Query("DELETE FROM product_table WHERE id=:productId")
     override fun deleteProduct(productId: Int)
 

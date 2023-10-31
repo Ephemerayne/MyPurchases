@@ -32,6 +32,10 @@ class PurchaseRepositoryImpl @Inject constructor(
         productDao.updateProduct(product.toEntity(purchaseId))
     }
 
+    override fun insertProducts(purchaseId: Int, products: List<ProductModel>) {
+        productDao.insertProducts(products.map { it.toEntity(purchaseId) })
+    }
+
     override fun deletePurchase(purchaseId: Long) {
         purchaseDao.deletePurchase(purchaseId)
     }

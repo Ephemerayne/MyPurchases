@@ -1,5 +1,7 @@
 package com.nyx.mypurchases.data.categories
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.nyx.mypurchases.data.mappers.toEntity
 import com.nyx.mypurchases.data.mappers.toModel
 import com.nyx.mypurchases.domain.entity.CategoryModel
@@ -25,7 +27,11 @@ class CategoryRepositoryImpl @Inject constructor(private val dao: CategoryDao) :
         dao.deleteAllCustomCategories()
     }
 
-    override fun getAllCategories():List<CategoryModel> {
+    override fun getAllCategories(): List<CategoryModel> {
         return dao.getAllCategories().map { it.toModel() }
+    }
+
+    override fun getAllCategoriesLiveData(): LiveData<List<CategoryModel>> {
+        return dao.getAllCategoriesLiveData().map { it.map { it.toModel() } }
     }
 }

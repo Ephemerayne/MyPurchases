@@ -7,11 +7,9 @@ interface ProductDao {
 
     fun insertProduct(product: ProductRoomEntity)
 
-    fun insertProducts(products: List<ProductRoomEntity>)
-
     fun updateProduct(product: ProductRoomEntity)
 
-    fun updateProducts(products: List<ProductRoomEntity>)
+    fun insertProducts(products: List<ProductRoomEntity>)
 
     fun deleteProduct(productId: Int)
 

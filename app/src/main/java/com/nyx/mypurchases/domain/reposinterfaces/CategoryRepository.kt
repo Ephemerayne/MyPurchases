@@ -1,5 +1,6 @@
 package com.nyx.mypurchases.domain.reposinterfaces
 
+import androidx.lifecycle.LiveData
 import com.nyx.mypurchases.domain.entity.CategoryModel
 
 interface CategoryRepository {
@@ -11,4 +12,5 @@ interface CategoryRepository {
     fun deleteAllCustomCategories()
 
     fun getAllCategories(): List<CategoryModel>
+    fun getAllCategoriesLiveData(): LiveData<List<CategoryModel>>
 }

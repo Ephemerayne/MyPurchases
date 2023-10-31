@@ -9,7 +9,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nyx.mypurchases.App
 import com.nyx.mypurchases.MainActivity
-import com.nyx.mypurchases.common.AddProductDialog
+import com.nyx.mypurchases.common.showAddProductDialog
+import com.nyx.mypurchases.common.showChangeCategoryDialog
 import com.nyx.mypurchases.common.swipehandler.SwipeHandler
 import com.nyx.mypurchases.databinding.FragmentViewingProductsBinding
 import com.nyx.mypurchases.ui.viewingpurchases.recyclerview.ProductsAdapter
@@ -29,13 +30,11 @@ class ViewingProductsFragment : Fragment() {
     private lateinit var swipeHandler: SwipeHandler
 
     //    private lateinit var snackbar: CustomSnackbar
-    private lateinit var addProductDialog: AddProductDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         swipeHandler = SwipeHandler(requireContext())
-        addProductDialog = AddProductDialog(requireContext())
 //        snackbar = CustomSnackbar()
     }
 
@@ -60,11 +59,24 @@ class ViewingProductsFragment : Fragment() {
         purchaseId?.let {
             viewModel.getPurchaseInfo(it)?.observe(viewLifecycleOwner) { purchase ->
 
-                setupAppBar(purchase.title, purchase.category.title) {
-                    addProductDialog.show { text ->
-                        viewModel.addProducts(purchase, text)
-                    }
-                }
+                setupAppBar(
+                    title = purchase.title,
+                    category = purchase.category.title,
+                    onAddProductClick = {
+                        showAddProductDialog { text ->
+                            viewModel.addProducts(purchase, text)
+                        }
+                    },
+                    onChangeCategoryClick = {
+                        showChangeCategoryDialog(
+                            viewLifecycleOwner = viewLifecycleOwner,
+                            categories = viewModel.getCategories(),
+                            checkedCategoryId = purchase.category.id,
+                            onChangeButtonClick = { categoryId ->
+                                viewModel.changeCategory(purchase, categoryId)
+                            }
+                        )
+                    })
 
                 productsAdapter.setProductsList(purchase.products)
 
@@ -80,11 +92,13 @@ class ViewingProductsFragment : Fragment() {
         title: String,
         category: String,
         onAddProductClick: () -> Unit,
+        onChangeCategoryClick: () -> Unit,
     ) {
         (activity as? MainActivity)?.setupActionBar(
             title,
             category,
-            onAddProductClick
+            onAddProductClick,
+            onChangeCategoryClick
         )
     }
 
