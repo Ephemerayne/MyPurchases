@@ -11,7 +11,7 @@ interface PurchaseRepository {
     fun insertProducts(purchaseId: Int, products: List<ProductModel>)
     fun deletePurchase(purchaseId: Long)
     fun getAllPurchases(): List<PurchaseModel>
-    fun getPurchaseInfo(purchaseId: Long): LiveData<PurchaseModel?>
+    fun getPurchaseInfo(purchaseId: Long): LiveData<PurchaseModel>
     fun deleteProducts(productsIds: List<Int>)
     fun deleteProduct(productsId: Int)
 }

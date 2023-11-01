@@ -10,8 +10,8 @@ import com.nyx.mypurchases.R
 import com.nyx.mypurchases.domain.entity.ProductModel
 
 internal class ProductsAdapter(
-    val onProductClick: (product: ProductModel, isChecked: Boolean) -> Unit,
-    val onScrollToTop: () -> Unit,
+    val onProductClick: (product: ProductModel, isChecked: Boolean, position: Int) -> Unit,
+    val onScrollToTop: () -> Unit, // back deleted items (snackbar)
 ) :
     RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder>() {
 
@@ -28,7 +28,11 @@ internal class ProductsAdapter(
         init {
             itemView.setOnClickListener {
                 checkbox.isChecked = !checkbox.isChecked
-                onProductClick.invoke(products[adapterPosition], checkbox.isChecked)
+                onProductClick.invoke(
+                    products[adapterPosition],
+                    checkbox.isChecked,
+                    adapterPosition
+                )
             }
         }
 
@@ -57,17 +61,21 @@ internal class ProductsAdapter(
         notifyItemRemoved(position)
     }
 
-   /* fun backDeletedItems(deletedProducts: MutableList<Pair<Int, ProductModel>>) {
-        println("debug: $deletedProducts")
-        for (product in deletedProducts) {
-            products.add(product.first, product.second)
-            notifyItemInserted(product.first)
+    fun moveCheckedItemToDown(product: ProductModel, position: Int) {
 
-            if (product.first == 0) {
-                onScrollToTop()
-            }
-        }
+    }
 
-        deletedProducts.clear()
-    }*/
+    /* fun backDeletedItems(deletedProducts: MutableList<Pair<Int, ProductModel>>) {
+         println("debug: $deletedProducts")
+         for (product in deletedProducts) {
+             products.add(product.first, product.second)
+             notifyItemInserted(product.first)
+
+             if (product.first == 0) {
+                 onScrollToTop()
+             }
+         }
+
+         deletedProducts.clear()
+     }*/
 }

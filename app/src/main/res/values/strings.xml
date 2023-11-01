@@ -16,4 +16,5 @@
     <string name="delete_item_snackbar_action">Отмена</string>
     <string name="floating_button_add_list_desc">Добавить список</string>
     <string name="button_change_text">Изменить</string>
+    <string name="products_empty_hint">Добавьте товары по клику на <b>+</b> \nв верхней панели</string>
 </resources>

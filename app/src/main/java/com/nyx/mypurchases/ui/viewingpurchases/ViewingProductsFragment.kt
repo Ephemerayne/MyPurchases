@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nyx.mypurchases.App
 import com.nyx.mypurchases.MainActivity
@@ -13,6 +12,7 @@ import com.nyx.mypurchases.common.showAddProductDialog
 import com.nyx.mypurchases.common.showChangeCategoryDialog
 import com.nyx.mypurchases.common.swipehandler.SwipeHandler
 import com.nyx.mypurchases.databinding.FragmentViewingProductsBinding
+import com.nyx.mypurchases.domain.entity.ProductModel
 import com.nyx.mypurchases.ui.viewingpurchases.recyclerview.ProductsAdapter
 import com.nyx.mypurchases.ui.viewingpurchases.viewModel.ViewingProductsViewModel
 import javax.inject.Inject
@@ -56,8 +56,8 @@ class ViewingProductsFragment : Fragment() {
 
         purchaseId = arguments?.getInt(ARGS_KEY)
 
-        purchaseId?.let {
-            viewModel.getPurchaseInfo(it)?.observe(viewLifecycleOwner) { purchase ->
+        purchaseId?.let { purchaseId ->
+            viewModel.getPurchaseInfo(purchaseId).observe(viewLifecycleOwner) { purchase ->
 
                 setupAppBar(
                     title = purchase.title,
@@ -80,10 +80,7 @@ class ViewingProductsFragment : Fragment() {
 
                 productsAdapter.setProductsList(purchase.products)
 
-                if (purchase.products.isEmpty()) {
-                    viewModel.deletePurchase(it)
-                    findNavController().popBackStack()
-                }
+                setEmptyViewVisibility(purchase.products)
             }
         }
     }
@@ -105,16 +102,28 @@ class ViewingProductsFragment : Fragment() {
     private fun setupProductsRecyclerAdapter() {
         binding.productsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            productsAdapter = ProductsAdapter(onProductClick = { product, isChecked ->
-                purchaseId?.let {
-                    viewModel.toggleProductCheck(it, product, isChecked)
-                }
-            },
+            productsAdapter = ProductsAdapter(
+                onProductClick = { product, isChecked, position ->
+                    purchaseId?.let {
+                        productsAdapter.moveCheckedItemToDown(product, position)
+                        viewModel.toggleProductCheck(it, product, isChecked)
+                    }
+                },
                 onScrollToTop = {
                     scrollToPosition(0)
                 })
 
             adapter = productsAdapter
+        }
+    }
+
+    private fun setEmptyViewVisibility(products: List<ProductModel>) {
+        if (products.isEmpty()) {
+            binding.emptyProductsHint.visibility = View.VISIBLE
+            binding.productsRecyclerView.visibility = View.GONE
+        } else {
+            binding.emptyProductsHint.visibility = View.GONE
+            binding.productsRecyclerView.visibility = View.VISIBLE
         }
     }
 

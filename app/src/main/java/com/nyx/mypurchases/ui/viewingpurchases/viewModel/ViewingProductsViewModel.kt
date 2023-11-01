@@ -21,18 +21,15 @@ class ViewingProductsViewModel @Inject constructor(
 
 //    private val deletedProducts: MutableSet<ProductModel> = mutableSetOf()
 
-    fun getPurchaseInfo(purchaseId: Int): LiveData<PurchaseModel>? {
+    fun getPurchaseInfo(
+        purchaseId: Int,
+    ): LiveData<PurchaseModel> {
         val purchase = purchaseRepository.getPurchaseInfo(purchaseId.toLong())
-
-        if (purchase.value?.products?.isEmpty() == true) {
-            deletePurchase(purchaseId)
-            return null
-        }
 
         return MediatorLiveData<PurchaseModel>().apply {
             addSource(purchase) { purchaseModel ->
 //                value = purchaseModel?.copy(products = purchaseModel.products - deletedProducts)
-                value = purchaseModel?.copy(products = purchaseModel.products)
+                value = purchaseModel?.copy(products = purchaseModel.products.sortedBy { it.isChecked })
             }
         }
     }
@@ -60,12 +57,6 @@ class ViewingProductsViewModel @Inject constructor(
             purchaseRepository.updatePurchase(
                 purchase = purchase.copy(category = purchase.category.copy(id = categoryId)),
             )
-        }
-    }
-
-    fun deletePurchase(purchaseId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            purchaseRepository.deletePurchase(purchaseId.toLong())
         }
     }
 
